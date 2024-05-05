@@ -1,0 +1,73 @@
+// This pipeline processes tree planting data from Neuss
+
+pipeline treesPipeline {
+
+  // Download data from the CSV URL
+  treesExtractor -> treesInterpreter;
+
+  // Split processing path for data interpretation and cleaning
+  treesInterpreter
+    -> treesCSVInterpreter  // Parse data as CSV
+    -> MpgColumnDeleter      // Drop "baumart_deutsch" column
+    -> treesTableInterpreter // Define table structure
+    -> treesLoader;          // Write data to SQLite
+
+  // Define data source (URL for the CSV file)
+  block treesExtractor oftype HttpExtractor {
+    url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/stadt-neuss-herbstpflanzung-2023/exports/csv";
+  }
+
+  // Placeholder for potential future text file processing (currently unused)
+  block treesInterpreter oftype TextFileInterpreter { }
+
+  // Define column to delete ("baumart_deutsch")
+  block MpgColumnDeleter oftype ColumnDeleter {
+    delete: ["baumart_deutsch"];
+  }
+
+  // Regular expression constraint for "Furth-" in "stadtteil"
+  constraint Func_1 oftype RegexConstraint {
+    regex: /^Furth-/;
+  }
+
+  // Regular expression constraint for geopoint format in "id"
+  constraint Func_2 oftype RegexConstraint {
+    regex: /\d{1,3}.\d{0,},[ ]\d{1,3}.\d{1,}/;
+  }
+
+  // Define custom value type for "stadtteil" with Func_1 constraint
+  valuetype Pattern_1 oftype text {
+    constraints: [Func_1];
+  }
+
+  // Define custom value type for "id" with Func_2 constraint
+  valuetype Pattern_2 oftype text {
+    constraints: [Func_2];
+  }
+
+  // Configure CSV parsing with delimiter and enclosure
+  block treesCSVInterpreter oftype CSVInterpreter {
+    delimiter: ";";
+    enclosing: '';
+  }
+
+  // Define table structure with column names and data types
+  block treesTableInterpreter oftype TableInterpreter {
+    header: true;
+    columns: [
+      "lfd_nr" oftype integer,
+      "stadtteil" oftype Pattern_1,  // Use custom type with constraint
+      "standort" oftype text,
+      "baumart_botanisch" oftype text,
+      "baumart_deutsch" oftype text,  // Marked for deletion
+      "id" oftype Pattern_2,          // Use custom type with constraint
+      "baumfamilie" oftype text
+    ];
+  }
+
+  // Define output - storing data in a SQLite table
+  block treesLoader oftype SQLiteLoader {
+    table: "trees";
+    file: "./trees.sqlite";
+  }
+}
