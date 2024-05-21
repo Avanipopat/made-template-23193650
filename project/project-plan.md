@@ -31,8 +31,9 @@ Understanding the differences between these terms is crucial for addressing the 
 ## Work Packages
 
 
-1. Example Issue [#1][i1]
-2. ...
-Short description of the DataSource.
+Data Collection and Preparation #1
+Data Analysis #2
+Statistical Analysis #3
+Data Pipeline #4
 
 
