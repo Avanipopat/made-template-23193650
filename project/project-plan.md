@@ -21,7 +21,7 @@ Understanding the differences between these terms is crucial for addressing the 
 * Data URL: https://www.kaggle.com/datasets/sevgisarac/temperature-change/data
 * Data Type: CSV
 * License NO: CC BY 3.0 IGO DEED
-*About Dataset: This Dataset contains information about average land temperature and  for maximum and minimum land temperatures and global ocean and land temperatures.
+* About Dataset: This Dataset contains information about average land temperature and  for maximum and minimum land temperatures and global ocean and land temperatures.
 ### Datasource2: Global Warming
 
 * Data URL: https://www.kaggle.com/datasets/kkhandekar/climate-change-vs-global-warming/data?select=Breakdown_Region.csv
