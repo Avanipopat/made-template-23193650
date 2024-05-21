@@ -1,13 +1,12 @@
 # Project Plan
 
-## Title
-<!-- Give your project a short title. -->
-Awesome MADE project.
+## Title :Our goal is to develop a predictive model using ARIMA to forecast future temperature trends.
+
 
 ## Main Question
 
 <!-- Think about one main question you want to answer based on the data. -->
-1. Does writing an example question help students write better project plans?
+1. 
 
 ## Description
 
@@ -19,15 +18,24 @@ XY is an important problem, because... This projects analyzes XY, using method A
 <!-- Describe each datasources you plan to use in a section. Use the prefic "DatasourceX" where X is the id of the datasource. -->
 
 ### Datasource1: ExampleSource
-* Metadata URL: https://mobilithek.info/offers/-6901989592576801458
-* Data URL: https://raw.githubusercontent.com/od-ms/radverkehr-zaehlstellen/main/100035541/2019-01.csv
+* Metadata URL: https://berkeleyearth.org/global-temperature-report-for-2023/
+* Data URL: https://www.kaggle.com/datasets/sevgisarac/temperature-change/data
 * Data Type: CSV
 
 Short description of the DataSource.
+### Datasource2: ExampleSource
+* Metadata URL: http://www.fao.org/faostat/en/#data/ET/metadata
+* Data URL: https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data/data
+* Data Type: CSV
 
+Short description of the DataSource.
 ## Work Packages
 
-<!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
+1) Pandas 
+2) Numpy 
+3) Matplotlib.pyplot 
+4) Seaborn 
+5) Xgboost 
 
 1. Example Issue [#1][i1]
 2. ...
