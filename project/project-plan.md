@@ -1,6 +1,6 @@
 ## Project Plan
-
-## Title :Our goal is to develop a predictive model using ARIMA to forecast future temperature trends.
+## Author Name : Avani Popat
+## Title : A predictive model using ARIMA to forecast future temperature trends.
 
 
 ## Main Question
@@ -10,19 +10,18 @@
 
 ## Description
 
- @@ -19,15 +18,24 @@ XY is an important problem, because... This projects analyzes XY, using method A
-<!-- Describe each datasources you plan to use in a section. Use the prefic "DatasourceX" where X is the id of the datasource. -->
 
 ### Datasource1: ExampleSource
 * Metadata URL: https://berkeleyearth.org/global-temperature-report-for-2023/
 * Data URL: https://www.kaggle.com/datasets/sevgisarac/temperature-change/data
 * Data Type: CSV
-
+* License NO: CC BY 3.0 IGO DEED
 Short description of the DataSource.
 ### Datasource2: ExampleSource
 * Metadata URL: http://www.fao.org/faostat/en/#data/ET/metadata
 * Data URL: https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data/data
 * Data Type: CSV
+* License NO: CC BY-NC-SA 4.0
 
 Short description of the DataSource.
 ## Work Packages
