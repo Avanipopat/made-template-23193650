@@ -18,9 +18,9 @@ Understanding the differences between these terms is crucial for addressing the 
 
 ### Datasource1: Climate Change
 * Metadata URL: https://berkeleyearth.org/global-temperature-report-for-2023/
-* Data URL: https://www.kaggle.com/datasets/sevgisarac/temperature-change/data
+* Data URL: https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data/code
 * Data Type: CSV
-* License NO: CC BY 3.0 IGO DEED
+* License NO: CC BY-NC-SA 4.0 DEED
 * About Dataset: This Dataset contains information about average land temperature and  for maximum and minimum land temperatures and global ocean and land temperatures.
 ### Datasource2: Global Warming
 
