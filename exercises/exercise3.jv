@@ -1,0 +1,83 @@
+pipeline RailTransportPipeline {
+
+    ExtractTransportData
+    -> InterpretData
+    -> ParseCSVData
+    -> CleanMetaData
+    -> SetColumnHeaders1
+    -> SetColumnHeaders2
+    -> DefineDataStructure
+    -> StoreInDatabase;
+
+    block ExtractTransportData oftype HttpExtractor {
+        url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
+    }
+
+    block InterpretData oftype TextFileInterpreter {
+        encoding: "latin4";
+    }
+
+    block ParseCSVData oftype CSVInterpreter {
+        delimiter: ";";
+        enclosingEscape: '"';
+    }
+
+    block CleanMetaData oftype RowDeleter {
+        delete: [row 1, row 2, row 3, row 4, row 5, row 6, row 7, row 41337, row 41338, row 41339];
+    }
+
+    // Setting headers for the first set of columns
+    block SetColumnHeaders1 oftype CellWriter {
+        at: range A1:E1;
+        write: ['year', 'month', 'product_id', 'product_name', 'product_origin'];
+    }
+
+    // Setting headers for the second set of columns
+    block SetColumnHeaders2 oftype CellWriter {
+        at: range AT1:AU1;
+        write: ['foreign', 'total'];
+    }
+
+    block DefineDataStructure oftype TableInterpreter {
+        header: true;
+        columns: [
+            "year" oftype PositiveNumber,
+            "month" oftype GermanMonthName,
+            "product_id" oftype ProductCode,
+            "product_name" oftype text,
+            "product_origin" oftype text,
+            "foreign" oftype PositiveNumber,
+            "total" oftype PositiveNumber
+        ];
+    }
+
+    block StoreInDatabase oftype SQLiteLoader {
+        table: "goods";
+        file: "./goodsTransportedByTrain.sqlite";
+    }
+}
+
+// Constraint for positive numeric values
+valuetype PositiveNumber oftype integer {
+    constraints: [MustBePositive];
+}
+
+constraint MustBePositive on integer: value >= 0;
+
+// Constraint for capitalizing German month names
+valuetype GermanMonthName oftype text {
+    constraints: [CapitalizeGermanMonth];
+}
+
+constraint CapitalizeGermanMonth oftype RegexConstraint {
+    regex: /\b(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\b/;
+}
+
+// Constraint for product codes starting with NST7
+valuetype ProductCode oftype text {
+    constraints: [StartsWithNST7];
+}
+
+constraint StartsWithNST7 oftype RegexConstraint {
+    regex: /^["NST7\-"][0-9A-Z]{3}/;
+}
