@@ -1,0 +1,77 @@
+pipeline GTFSDataPipeline {
+
+    GTFSFeedDownloader
+        -> StopFileSelector 
+        -> StopTextFileProcessor
+        -> StopCSVProcessor 
+        -> StopTableProcessor 
+        -> StopDataLoader;
+
+
+    //  we download the zip file 
+    block GTFSFeedDownloader oftype GTFSExtractor {
+        url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+    }
+
+    block StopFileSelector oftype FilePicker {
+        path: "/stops.txt";
+    }
+
+ 
+    //  pipeline 
+
+    block StopTextFileProcessor oftype TextFileInterpreter { 
+        encoding: "utf8";
+    }
+   
+    block StopCSVProcessor oftype CSVInterpreter { 
+        delimiter: ",";
+        enclosing: '"';
+    }
+
+    block StopTableProcessor oftype TableInterpreter {
+        header: true;
+        columns: [
+            "stop_id" oftype integer,
+            "stop_name" oftype removeInvalidRows,
+            "stop_lat" oftype latRangeConstraints,
+            "stop_lon" oftype decimal,
+            "zone_id" oftype zoneID,
+        ];
+    }
+
+    block StopDataLoader oftype SQLiteLoader {
+        table: "stops";
+        file: "./gtfs.sqlite";
+    }
+}
+
+
+constraint ZoneConstraint on integer: value == 1645;
+
+valuetype zoneID oftype integer {
+    constraints: [ZoneConstraint];
+}
+
+valuetype latRangeConstraints oftype decimal {
+    constraints: [
+        LatitudeRangeConstraints,
+    ];
+}
+
+valuetype removeInvalidRows oftype text {
+    constraints: [
+        InvalidRowConstraint,
+    ];
+}
+
+constraint LatitudeRangeConstraints oftype RangeConstraint {
+    lowerBound: -90.0;
+    lowerBoundInclusive: true;
+    upperBound: 90.0;
+    upperBoundInclusive: true;
+}
+
+constraint InvalidRowConstraint oftype DenylistConstraint {
+    denylist: ["Nan", " ", "Null", ""];
+}
